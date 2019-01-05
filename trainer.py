@@ -7,10 +7,7 @@ from keras.models import load_model
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
-from IPython.display import clear_output
 import imageio
-from IPython.display import Image
-from IPython.display import HTML
 from scipy.special import logit
 from scipy.special import expit
 from sklearn.preprocessing import scale
@@ -101,24 +98,16 @@ def color_of_answer(answer):
   else: return 'gray'
 
 forwardTimes = imbed_reverse_expand_times(identity_transform)
-#reverseTimes = expand_times(reverse_transform)
-#descendingTimes = expand_times(descending_transform)
-#ascendingTimes = expand_times(ascending_transform)
-
-#loss: 0.2310 - binary_accuracy: 0.8976
-#my_infile = np.column_stack((ratios, forwardTimes, reverseTimes, descendingTimes, ascendingTimes))
-#loss: 0.2180 - binary_accuracy: 0.9023 
-#my_infile = np.column_stack((ratios, forwardTimes, reverseTimes))
 my_infile = np.column_stack((ratios, forwardTimes))
-#my_infile = ratios
 my_outfile = outputs
-x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.01)
+x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.2)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
-model_file = "120-1.h5"
-inputLayer = keras.layers.Dense(120, input_shape=(61,), kernel_initializer='normal', activation='sigmoid')
+model_file = "30-1.h5"
+
 my_model = keras.Sequential([
-    inputLayer,
+    keras.layers.Dense(30, input_shape=(61,), kernel_initializer='normal', activation='sigmoid'),
+    #keras.layers.Dense(30, kernel_initializer='normal', activation='sigmoid'),
     keras.layers.Dense(1, kernel_initializer='normal', activation='sigmoid')
 ])
 
@@ -132,8 +121,6 @@ c_disp = array_map(color_of_answer, tpy)
 
 noise1 = np.random.normal(0, 0.5, y_disp.shape[0])
 noise2 = np.random.normal(0, 0.5, y_disp.shape[0])
-
-
 
 for filename in sorted(os.listdir(".")):
   if (model_file in filename and ".png" in filename):
@@ -201,21 +188,16 @@ def save_image(state):
     xpn = tpp + n1
     ypn = 0.5 + n2
 
-    xpn1 = xpn[tpy > 0.5]
-    xpn0 = xpn[tpy < 0.5]
-
-    ypn1 = ypn[tpy > 0.5]
-    ypn0 = ypn[tpy < 0.5]
-
-
-    #sns.kdeplot(xpn, ypn, shade=False, shade_lowest=False, legend=False, cmap="Blues").set_title(title)
     plt.scatter(xpn, ypn, color=c_disp)
-    #plt.scatter(xpn0, ypn0, color='grey')
-    #sns.kdeplot(xpn0, ypn0, shade=False, shade_lowest=False, legend=False, cmap="Reds").set_title(title)
-    #sns.plt.contour(xpn, ypn + n2)
 
     image_name = "{}_{}.png".format(model_file, 100000 + state.total_steps)
     plt.savefig(image_name)  
+
+def render_gif():
+    with imageio.get_writer(gif_file, mode='I', fps = 10) as writer:
+      for filename in sorted(os.listdir(".")):
+        if (model_file in filename and ".png" in filename):
+          writer.append_data(imageio.imread(filename))
   
 while True:
   if (goal_loss <= final_goal_loss): break
@@ -225,7 +207,6 @@ while True:
   render_countdown = render_countdown - 1
   if (render_countdown == 0):
     render_countdown = 5
-    with imageio.get_writer(gif_file, mode='I', fps = 10) as writer:
-      for filename in sorted(os.listdir(".")):
-        if (model_file in filename and ".png" in filename):
-          writer.append_data(imageio.imread(filename))
+    my_model.save(model_file)
+    render_gif()
+
