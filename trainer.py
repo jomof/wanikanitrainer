@@ -117,10 +117,10 @@ my_outfile = outputs
 x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.01)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
-model_file = "45-1.h5"
+model_file = "w-360-45-1.h5"
 
 my_model = keras.Sequential([
-    keras.layers.Dense(45, input_shape=(61,), kernel_initializer='normal', activation='sigmoid'),
+    keras.layers.Dense(45, input_shape=(360,), kernel_initializer='normal', activation='sigmoid'),
     #keras.layers.Dense(30, kernel_initializer='normal', activation='sigmoid'),
     keras.layers.Dense(1, kernel_initializer='normal', activation='sigmoid')
 ])
