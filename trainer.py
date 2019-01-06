@@ -216,7 +216,7 @@ def render_gif():
 while True:
   if (goal_loss <= final_goal_loss): break
   state = train_until(goal_loss, state)
-  # save_image(state)
+  save_image(state)
   goal_loss = goal_loss + loss_step
   render_countdown = render_countdown - 1
   if (render_countdown == 0):
