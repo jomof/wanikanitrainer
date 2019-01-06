@@ -66,10 +66,14 @@ def reverse_transform(a):
   result = list(a)
   result.reverse()
   return result
+def descending_transform_abs(a): 
+  return sorted(list(a), key = lambda x : -abs(x))
+def ascending_transform_abs(a): 
+  return sorted(list(a), key = lambda x : abs(x))
 def descending_transform(a): 
-  return sorted(a.copy(), key = lambda x : -abs(x))
+  return sorted(list(a), key = lambda x : -x)
 def ascending_transform(a): 
-  return sorted(a.copy(), key = lambda x : abs(x))
+  return sorted(list(a), key = lambda x : x)
 def backfill(width, arr):
   x = arr.copy()
   total = x.shape[0]
@@ -79,7 +83,6 @@ def backfill(width, arr):
     if(x[targetIndex] == 0):
       x[targetIndex] = x[sourceIndex]
   return x
-
 
 def imbed_reverse_expand_times(f):
   def ff(a):
@@ -97,10 +100,21 @@ def color_of_answer(answer):
   if (answer > 0.5): return 'blue'
   else: return 'gray'
 
-forwardTimes = imbed_reverse_expand_times(identity_transform)
-my_infile = np.column_stack((ratios, forwardTimes))
+forwardTimes = expand_times(identity_transform)
+reverseTimes = expand_times(reverse_transform)
+descendingTimesAbs = expand_times(descending_transform_abs)
+ascendingTimesAbs = expand_times(ascending_transform_abs)
+descendingTimes = expand_times(descending_transform)
+ascendingTimes = expand_times(ascending_transform)
+
+#loss: 0.2310 - binary_accuracy: 0.8976
+my_infile = np.column_stack((forwardTimes, reverseTimes, descendingTimesAbs, ascendingTimesAbs, descendingTimes, ascendingTimes))
+#loss: 0.2180 - binary_accuracy: 0.9023 
+#my_infile = np.column_stack((ratios, forwardTimes, reverseTimes))
+#my_infile = np.column_stack((ratios, forwardTimes))
+#my_infile = ratios
 my_outfile = outputs
-x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.2)
+x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.01)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
 model_file = "45-1.h5"
