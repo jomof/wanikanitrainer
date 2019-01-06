@@ -103,10 +103,10 @@ my_outfile = outputs
 x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.2)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
-model_file = "30-1.h5"
+model_file = "45-1.h5"
 
 my_model = keras.Sequential([
-    keras.layers.Dense(30, input_shape=(61,), kernel_initializer='normal', activation='sigmoid'),
+    keras.layers.Dense(45, input_shape=(61,), kernel_initializer='normal', activation='sigmoid'),
     #keras.layers.Dense(30, kernel_initializer='normal', activation='sigmoid'),
     keras.layers.Dense(1, kernel_initializer='normal', activation='sigmoid')
 ])
@@ -202,7 +202,7 @@ def render_gif():
 while True:
   if (goal_loss <= final_goal_loss): break
   state = train_until(goal_loss, state)
-  save_image(state)
+  # save_image(state)
   goal_loss = goal_loss + loss_step
   render_countdown = render_countdown - 1
   if (render_countdown == 0):
