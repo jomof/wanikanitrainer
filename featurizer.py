@@ -67,12 +67,12 @@ def featurize(dataCsv):
   maxTime = max([max(map(max, times)), abs(min(map(min, times)))])
   times = times / maxTime
 
-  forwardTimes = expand_times(identity_transform, times, timeWindows)
-  reverseTimes = expand_times(reverse_transform, times, timeWindows)
-  descendingTimesAbs = expand_times(descending_transform_abs, times, timeWindows)
-  ascendingTimesAbs = expand_times(ascending_transform_abs, times, timeWindows)
-  descendingTimes = expand_times(descending_transform, times, timeWindows)
-  ascendingTimes = expand_times(ascending_transform, times, timeWindows)
+  forwardTimes = imbed_reverse_expand_times(identity_transform, times, timeWindows)
+  reverseTimes = imbed_reverse_expand_times(reverse_transform, times, timeWindows)
+  descendingTimesAbs = imbed_reverse_expand_times(descending_transform_abs, times, timeWindows)
+  ascendingTimesAbs = imbed_reverse_expand_times(ascending_transform_abs, times, timeWindows)
+  descendingTimes = imbed_reverse_expand_times(descending_transform, times, timeWindows)
+  ascendingTimes = imbed_reverse_expand_times(ascending_transform, times, timeWindows)
 
   inputs = np.column_stack((forwardTimes, reverseTimes, descendingTimesAbs, ascendingTimesAbs, descendingTimes, ascendingTimes))
   return inputs, outputs
