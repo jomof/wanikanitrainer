@@ -30,10 +30,10 @@ my_infile, my_outfile = ft.featurize(dataCsv)
 x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.20)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
-model_file = "75-1.h5"
+model_file = "80-1.h5"
 
 my_model = keras.Sequential([
-    keras.layers.Dense(75, input_shape=(60,), kernel_initializer='normal', activation='sigmoid'),
+    keras.layers.Dense(80, input_shape=(60,), kernel_initializer='normal', activation='sigmoid'),
     #keras.layers.Dense(30, kernel_initializer='normal', activation='sigmoid'),
     keras.layers.Dense(1, kernel_initializer='normal', activation='sigmoid')
 ])
@@ -66,13 +66,15 @@ goal_loss = 0.7
 final_goal_loss = 0.2
 loss_step = -0.005
 render_countdown = 5
-
-
+min_steps = 500
+max_steps = 1000
 
 gif_file = "{}.gif".format(model_file)
 
 def train_steps(steps, state):
   if (steps < state.latest_steps): steps = state.latest_steps
+  if (steps < min_steps): steps = min_steps
+  if (steps > max_steps): steps = max_steps
   state.prior_loss = state.latest_loss
   #print("Stepping {} starting at {}".format(steps, state.total_steps))
   my_model.fit(x_train, y_train, epochs=1, steps_per_epoch=steps, verbose = 0)
@@ -128,7 +130,7 @@ def render_gif():
 while True:
   if (goal_loss <= final_goal_loss): break
   state = train_until(goal_loss, state)
-  save_image(state)
+  # save_image(state)
   goal_loss = goal_loss + loss_step
   render_countdown = render_countdown - 1
   if (render_countdown == 0):
