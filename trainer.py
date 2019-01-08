@@ -116,7 +116,7 @@ def save_image(state):
 
     plt.scatter(xpn, ypn, color=c_disp)
 
-    image_name = "{}_{}.png".format(model_file, 100000 + state.total_steps)
+    image_name = "{}_{}.png".format(model_file, 10000000 + state.total_steps)
     plt.savefig(image_name)  
 
 def render_gif():
