@@ -74,8 +74,8 @@ def featurize(dataCsv):
   descendingTimes = imbed_reverse_expand_times(descending_transform, times, timeWindows)
   ascendingTimes = imbed_reverse_expand_times(ascending_transform, times, timeWindows)
 
-  inputs = np.column_stack((forwardTimes, reverseTimes, descendingTimesAbs, ascendingTimesAbs, descendingTimes, ascendingTimes))
-  return inputs, outputs
+  #inputs = np.column_stack((forwardTimes, reverseTimes, descendingTimesAbs, ascendingTimesAbs, descendingTimes, ascendingTimes))
+  return forwardTimes, outputs
 
 # Tests
 def test_all_featurizer():

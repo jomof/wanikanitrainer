@@ -27,13 +27,13 @@ def color_of_answer(answer):
   else: return 'gray'
 
 my_infile, my_outfile = ft.featurize(dataCsv)
-x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.01)
+x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.20)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
-model_file = "w-360-360-1.h5"
+model_file = "75-1.h5"
 
 my_model = keras.Sequential([
-    keras.layers.Dense(360, input_shape=(360,), kernel_initializer='normal', activation='sigmoid'),
+    keras.layers.Dense(75, input_shape=(60,), kernel_initializer='normal', activation='sigmoid'),
     #keras.layers.Dense(30, kernel_initializer='normal', activation='sigmoid'),
     keras.layers.Dense(1, kernel_initializer='normal', activation='sigmoid')
 ])
@@ -95,7 +95,7 @@ def train_until(target_loss, state):
       train_steps(state.latest_steps, state)   
       
     if (target_loss > state.latest_loss): 
-      print("- met loss goal of {0:.4f} at step {1} with actual loss {0:.4f}".format(target_loss, state.total_steps, state.latest_loss))
+      print("- met loss goal of {0:.4f} at step {1} with actual loss {2:.4f}".format(target_loss, state.total_steps, state.latest_loss))
       return state
         
 def save_image(state):
