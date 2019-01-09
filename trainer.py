@@ -33,12 +33,14 @@ x_train.shape, y_train.shape, x_test.shape, y_test.shape
 model_file = "80-1.h5"
 
 my_model = keras.Sequential([
-    keras.layers.Dense(80, input_shape=(60,), kernel_initializer='normal', activation='sigmoid'),
+    keras.layers.Dense(80, input_shape=(60,), kernel_initializer='normal', activation='relu'),
     #keras.layers.Dense(30, kernel_initializer='normal', activation='sigmoid'),
     keras.layers.Dense(1, kernel_initializer='normal', activation='sigmoid')
 ])
 
-my_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['binary_accuracy'])
+optimizer = keras.optimizers.Adam(lr=0.00001, beta_1=0.9, beta_2=0.999)
+
+my_model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['binary_accuracy'])
 total_epochs = 0
 total_steps = 0
 x_disp = x_test
@@ -65,7 +67,7 @@ state = TrainState()
 goal_loss = 0.7
 final_goal_loss = 0.2
 loss_step = -0.005
-render_countdown = 5
+render_countdown = 1
 min_steps = 500
 max_steps = 1000
 
@@ -119,7 +121,7 @@ def save_image(state):
     plt.scatter(xpn, ypn, color=c_disp)
 
     image_name = "{}_{}.png".format(model_file, 10000000 + state.total_steps)
-    plt.savefig(image_name)  
+    #plt.savefig(image_name)  
 
 def render_gif():
     with imageio.get_writer(gif_file, mode='I', fps = 10) as writer:
@@ -134,7 +136,7 @@ while True:
   goal_loss = goal_loss + loss_step
   render_countdown = render_countdown - 1
   if (render_countdown == 0):
-    render_countdown = 5
+    render_countdown = 1
     my_model.save(model_file)
-    render_gif()
+    #render_gif()
 
