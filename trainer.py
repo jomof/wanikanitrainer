@@ -30,15 +30,16 @@ my_infile, my_outfile = ft.featurize(dataCsv)
 x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.20)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
-model_file = "80-1.h5"
+model_file = "70-1.h5"
 
 my_model = keras.Sequential([
-    keras.layers.Dense(80, input_shape=(60,), kernel_initializer='normal', activation='relu'),
-    #keras.layers.Dense(30, kernel_initializer='normal', activation='sigmoid'),
-    keras.layers.Dense(1, kernel_initializer='normal', activation='sigmoid')
+    keras.layers.Dense(70, input_shape=(60,), activation='sigmoid'),
+    #keras.layers.Dense(10, activation='relu'),
+    #keras.layers.Dense(30, activation='relu'),
+    keras.layers.Dense(1, activation='relu')
 ])
 
-optimizer = keras.optimizers.Adam(lr=0.00001, beta_1=0.9, beta_2=0.999)
+optimizer = keras.optimizers.Adam(lr=0.0001, beta_1=0.9, beta_2=0.999)
 
 my_model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['binary_accuracy'])
 total_epochs = 0
@@ -69,7 +70,7 @@ final_goal_loss = 0.2
 loss_step = -0.005
 render_countdown = 1
 min_steps = 500
-max_steps = 1000
+max_steps = 10000
 
 gif_file = "{}.gif".format(model_file)
 
@@ -79,7 +80,7 @@ def train_steps(steps, state):
   if (steps > max_steps): steps = max_steps
   state.prior_loss = state.latest_loss
   #print("Stepping {} starting at {}".format(steps, state.total_steps))
-  my_model.fit(x_train, y_train, epochs=1, steps_per_epoch=steps, verbose = 0)
+  my_model.fit(x_train, y_train, epochs=1, steps_per_epoch=steps, verbose = 1)
   loss, acc = my_model.evaluate(x_test, y_test, verbose=0)
   print("- step {0} loss = {1:.4f} accuracy = {2:.4f}".format(state.total_steps, loss, acc))
   state.latest_loss = loss
