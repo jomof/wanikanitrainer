@@ -38,7 +38,7 @@ my_model = keras.Sequential([
     keras.layers.Dense(1, activation='sigmoid')
 ])
 
-optimizer = keras.optimizers.Adam(lr=0.0001, beta_1=0.9, beta_2=0.999)
+optimizer = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
 
 my_model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['binary_accuracy'])
 total_epochs = 0
