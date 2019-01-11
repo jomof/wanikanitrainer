@@ -79,15 +79,15 @@ def featurize(times, maxTime):
   timeWindows = times.shape[1]
   times = times / maxTime
 
-  forwardTimes = imbed_reverse_expand_times(identity_transform, times, timeWindows)
-  #reverseTimes = imbed_reverse_expand_times(reverse_transform, times, timeWindows)
-  #descendingTimesAbs = imbed_reverse_expand_times(descending_transform_abs, times, timeWindows)
-  #ascendingTimesAbs = imbed_reverse_expand_times(ascending_transform_abs, times, timeWindows)
-  #descendingTimes = imbed_reverse_expand_times(descending_transform, times, timeWindows)
-  #ascendingTimes = imbed_reverse_expand_times(ascending_transform, times, timeWindows)
+  forwardTimes = expand_times(identity_transform, times, timeWindows)
+  reverseTimes = expand_times(reverse_transform, times, timeWindows)
+  descendingTimesAbs = expand_times(descending_transform_abs, times, timeWindows)
+  ascendingTimesAbs = expand_times(ascending_transform_abs, times, timeWindows)
+  descendingTimes = expand_times(descending_transform, times, timeWindows)
+  ascendingTimes = expand_times(ascending_transform, times, timeWindows)
 
-  #inputs = np.column_stack((forwardTimes, reverseTimes, descendingTimesAbs, ascendingTimesAbs, descendingTimes, ascendingTimes))
-  return forwardTimes
+  return np.column_stack((forwardTimes, reverseTimes, descendingTimesAbs, ascendingTimesAbs, descendingTimes, ascendingTimes))
+  #return forwardTimes
 
 # Tests
 def test_all_featurizer():

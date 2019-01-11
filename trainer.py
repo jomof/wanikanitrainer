@@ -29,10 +29,10 @@ my_infile = ft.featurize(times, maxTime)
 x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.01)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
-model_file = "80-1.h5"
+model_file = "1-1.h5"
 
 my_model = keras.Sequential([
-    keras.layers.Dense(80, input_shape=(60,), activation='relu'),
+    keras.layers.Dense(1, input_shape=(360,), activation='relu'),
     #keras.layers.Dense(10, activation='relu'),
     #keras.layers.Dense(30, activation='relu'),
     keras.layers.Dense(1, activation='sigmoid')
