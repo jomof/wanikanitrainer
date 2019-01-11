@@ -57,25 +57,37 @@ def ascending_transform_abs(a): return sorted(list(a), key = lambda x : abs(x))
 def descending_transform(a): return sorted(list(a), key = lambda x : -x)
 def ascending_transform(a): return sorted(list(a), key = lambda x : x)
 
-def featurize(dataCsv):
+# Read data.csv file from Wanikani:
+#  Column 1 : 1 = pass, blank = fail
+#  Column 2 : Historical pass/fail percentage
+#  Column 3 through N : Positive means test passed, negative means test failed, absolute 
+#                       value is number of days since the prior test
+# and decompose into:
+#  outputs : column 1 the test pass/fail value
+#  times : columns 3 through n as an array
+#  maxTime : the absolute value of a all times from column 3 through N
+def decompose(dataCsv):  
   outputs, residue = np.hsplit(dataCsv, [1])
-  ratios, times = np.hsplit(residue, [1])
+  _, times = np.hsplit(residue, [1])
   outputs = np.nan_to_num(outputs)
-  ratios = np.nan_to_num(ratios)
-  timeWindows = times.shape[1]
-
   maxTime = max([max(map(max, times)), abs(min(map(min, times)))])
+  return outputs, times, maxTime
+
+# Read data.csv file from Wanikani and return fixed size time windows encoded for a 
+# model to train against
+def featurize(times, maxTime):
+  timeWindows = times.shape[1]
   times = times / maxTime
 
   forwardTimes = imbed_reverse_expand_times(identity_transform, times, timeWindows)
-  reverseTimes = imbed_reverse_expand_times(reverse_transform, times, timeWindows)
-  descendingTimesAbs = imbed_reverse_expand_times(descending_transform_abs, times, timeWindows)
-  ascendingTimesAbs = imbed_reverse_expand_times(ascending_transform_abs, times, timeWindows)
-  descendingTimes = imbed_reverse_expand_times(descending_transform, times, timeWindows)
-  ascendingTimes = imbed_reverse_expand_times(ascending_transform, times, timeWindows)
+  #reverseTimes = imbed_reverse_expand_times(reverse_transform, times, timeWindows)
+  #descendingTimesAbs = imbed_reverse_expand_times(descending_transform_abs, times, timeWindows)
+  #ascendingTimesAbs = imbed_reverse_expand_times(ascending_transform_abs, times, timeWindows)
+  #descendingTimes = imbed_reverse_expand_times(descending_transform, times, timeWindows)
+  #ascendingTimes = imbed_reverse_expand_times(ascending_transform, times, timeWindows)
 
   #inputs = np.column_stack((forwardTimes, reverseTimes, descendingTimesAbs, ascendingTimesAbs, descendingTimes, ascendingTimes))
-  return forwardTimes, outputs
+  return forwardTimes
 
 # Tests
 def test_all_featurizer():
@@ -87,7 +99,5 @@ def test_all_featurizer():
   negated = array_map(lambda x: -x, array)
   if (negated.shape[0] != 3): raise Exception("wrong size")
   if (negated[1] != -2): raise Exception("wrong value {}".format(negated))
-
-
 
 test_all_featurizer()
