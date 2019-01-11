@@ -26,7 +26,7 @@ dataCsv = np.genfromtxt('data.csv', delimiter=',')
 my_outfile, times, maxTime = ft.decompose(dataCsv)
 my_infile = ft.featurize(times, maxTime)
 
-x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.20)
+x_train, x_test, y_train, y_test = train_test_split(my_infile, my_outfile, test_size=0.01)
 x_train.shape, y_train.shape, x_test.shape, y_test.shape
 
 model_file = "80-1.h5"
@@ -38,7 +38,7 @@ my_model = keras.Sequential([
     keras.layers.Dense(1, activation='sigmoid')
 ])
 
-optimizer = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
+optimizer = keras.optimizers.Adam(lr=0.0001, beta_1=0.9, beta_2=0.999)
 
 my_model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['binary_accuracy'])
 total_epochs = 0
